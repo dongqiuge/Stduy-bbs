@@ -1,32 +1,50 @@
 <?php
 
-namespace App\Console;
+namespace App\Exceptions;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 
-class Kernel extends ConsoleKernel
+class Handler extends ExceptionHandler
 {
     /**
-     * Define the application's command schedule.
+     * A list of exception types with their corresponding custom log levels.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
+     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
-    protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+    protected $levels = [
+        //
+    ];
 
     /**
-     * Register the commands for the application.
+     * A list of the exception types that are not reported.
+     *
+     * @var array<int, class-string<\Throwable>>
+     */
+    protected $dontReport = [
+        //
+    ];
+
+    /**
+     * A list of the inputs that are never flashed to the session on validation exceptions.
+     *
+     * @var array<int, string>
+     */
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
+    ];
+
+    /**
+     * Register the exception handling callbacks for the application.
      *
      * @return void
      */
-    protected function commands()
+    public function register()
     {
-        $this->load(__DIR__.'/Commands');
-
-        require base_path('routes/console.php');
+        $this->reportable(function (Throwable $e) {
+            //
+        });
     }
 }
