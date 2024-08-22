@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-static-top">
     <div class="container">
         <!-- Branding Image -->
@@ -27,13 +28,13 @@
                            data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <img
-                                src="https://img.freepik.com/premium-photo/3d-avatar-cartoon-character_113255-94484.jpg?w=2000"
+                                src="{{ Auth::user()->avatar }}"
                                 class="img-responsive img-circle" width="30px" height="30px" alt="">
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="">个人中心</a>
-                            <a class="dropdown-item" href="">编辑资料</a>
+                            <a class="dropdown-item" href="{{ route('users.show', Auth::id()) }}">个人中心</a>
+                            <a class="dropdown-item" href="{{ route('users.edit', Auth::id()) }}">编辑资料</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
                                 <form action="{{ route('logout') }}" method="POST">
