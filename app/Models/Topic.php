@@ -2,32 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-class Topic extends Model
+class Model extends EloquentModel
 {
-    use HasFactory;
-
-    protected $fillable = ['title', 'body', 'user_id', 'category_id', 'reply_count', 'view_count', 'last_reply_user_id', 'order', 'excerpt', 'slug'];
-
-    /**
-     * 定义于 category 的关联
-     *
-     * @return BelongsTo
-     */
-    public function category(): BelongsTo
+    public function scopeRecent($query)
     {
-        return $this->belongsTo(Category::class);
+        return $query->orderBy('id', 'desc');
     }
 
-    /**
-     * 定义于 user 的关联
-     *
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
+    public function scopeOrdered($query)
     {
-        return $this->belongsTo(User::class);
+        return $query->orderBy('order', 'desc');
     }
+
 }
