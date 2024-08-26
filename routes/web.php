@@ -54,3 +54,5 @@ Route::resource('topics', 'TopicsController', ['only' => ['index', 'show', 'crea
 // PUT|PATCH       topics/{topic} ............. topics.update › TopicsController@update // 编辑话题
 // DELETE          topics/{topic} ........... topics.destroy › TopicsController@destroy // 删除话题
 // GET|HEAD        topics/{topic}/edit ............ topics.edit › TopicsController@edit // 编辑话题的页面
+
+Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
