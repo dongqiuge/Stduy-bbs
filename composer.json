@@ -16,9 +16,11 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "mews/captcha": "~3.0",
-        "overtrue/laravel-lang": "~6.0"
+        "overtrue/laravel-lang": "~6.0",
+        "summerblue/laravel-active": "9.*"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "~3.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "laravel/ui": "3.4.5",
