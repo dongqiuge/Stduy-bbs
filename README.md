@@ -76,7 +76,13 @@
 - 在 Windows 下 PhpStorm 中 shift + control + o 打开某个文件，在 Mac 下是 shift + command + o
 
 - 创建 topics 表
-@@ -82,6 +89,7 @@
+    - `title:string:index` 标题 string 需要索引
+    - `body:text` 内容 text
+    - `user_id:bigInteger:unsigned:index` 用户 int unsigned index
+    - `category_id:integer:unsigned:index` 分类 int unsigned index
+    - `reply_count:integer:unsigned:default(0)` 回复数 int 默认 0
+    - `view_count:integer:unsigned:default(0)` 查看数 int 默认 0
+    - `last_reply_user_id:integer:unsigned:default(0)` 最后回复用户 int 默认 0
     - `order:integer:unsigned:default(0)` 排序 int 默认 0
     - `excerpt:text:nullable` 摘要 text 可为空
     - `slug:string:nullable` slug string 可为空
@@ -101,6 +107,12 @@
     - \+ ./app/Providers/AuthServiceProvider.php (Updated) // 更新 AuthServiceProvider 文件
     - \+ ./routes/web.php (Updated) // 更新 web.php 路由文件
     -
-    - --- Views ---
+     - --- Views ---
     - \+ create_and_edit.blade.php // 创建和编辑视图
     - \+ index.blade.php // 列表视图
+    - \+ show.blade.php // 详情视图
+    - x ./resources/views/layouts/app.blade.php (Skipped) // 跳过 layouts/app.blade.php
+    - \+ ./resources/views/common/error.blade.php // 创建 common/error.blade.php
+    - INFO Running migrations. // 执行数据迁移
+    -
+    - 2024_08_23_104426_create_topics_table .................................... 44ms DONE // 创建 topics 表
