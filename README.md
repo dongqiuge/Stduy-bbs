@@ -116,3 +116,15 @@
     - INFO Running migrations. // 执行数据迁移
     -
     - 2024_08_23_104426_create_topics_table .................................... 44ms DONE // 创建 topics 表
+
+ ## 2024-08-26
+- 运行的命令
+    - [x] `composer require "barryvdh/laravel-debugbar:~3.6" --dev` 安装调试工具
+    - [x] `php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"` 发布调试工具配置文件
+    - [x] `php artisan make:controller CategoriesController` 创建 CategoriesController 控制器
+    - [x] `composer require "summerblue/laravel-active:9.*"` 安装 laravel-active
+
+- 完成的任务
+    - 性能优化
+    - 分类下的话题列表
+    - 话题列表排序
