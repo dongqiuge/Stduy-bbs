@@ -56,3 +56,6 @@ Route::resource('topics', 'TopicsController', ['only' => ['index', 'show', 'crea
 // GET|HEAD        topics/{topic}/edit ............ topics.edit › TopicsController@edit // 编辑话题的页面
 
 Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
+
+// 话题表单中的图片上传
+Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
