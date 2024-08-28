@@ -136,6 +136,7 @@
     - 将 scripts/module.js, scripts/hotkeys.js, scripts/uploader.js, scripts/simditor.js 放在 resources/js 目录下
     - `yarn add jquery` 安装 jquery, 安装完成后在 resources/js/bootstrap.js 中引入
     - `yarn run watch-poll` 编译前端资源
+    
 - 今天做了些什么
     - 在用户个人页面，展示用户创建的话题
     - 用户创建话题
@@ -143,6 +144,7 @@
     - 话题详情页
     - 引入了 simditor 所见即所得编辑器
     - 处理 simditor 上传图片
+    
 - Eloquence ORM 触发的事件
     - creating, 创建的时候触发
     - created, 创建完成后触发
