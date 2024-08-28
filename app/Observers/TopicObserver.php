@@ -9,13 +9,14 @@ use App\Models\Topic;
 
 class TopicObserver
 {
-    public function creating(Topic $topic)
+    /**
+     * 事件监听：在保存前生成话题摘要
+     *
+     * @param Topic $topic
+     * @return void
+     */
+    public function saving(Topic $topic): void
     {
-        //
-    }
-
-    public function updating(Topic $topic)
-    {
-        //
+        $topic->excerpt = make_excerpt($topic->body);
     }
 }

@@ -5,11 +5,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Topic
+ * @property integer id ID
+ * @property string title 标题
+ * @property string body 内容
+ * @property integer user_id 用户 ID
+ * @property integer category_id 分类 ID
+ * @property integer reply_count 回复数量
+ * @property integer view_count 查看数量
+ * @property integer last_reply_user_id 最后回复的用户 ID
+ * @property integer order 最后回复的用户 ID
+ * @property string excerpt 摘要
+ * @property string slug SEO 友好的 URI
+ * @property string created_at 创建时间
+ * @property string updated_at 创建时间
+ * @extends \Illuminate\Database\Eloquent\Model
+ */
 class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'body', 'user_id', 'category_id', 'reply_count', 'view_count', 'last_reply_user_id', 'order', 'excerpt', 'slug'];
+    /**
+     * 定义可以批量赋值的字段
+     * 允许用户直接对数据进行修改，通过表单提交 title、body、category_id、excerpt、slug 字段来新增话题
+     * 在每一次开发数据模型的 CURD 功能时，都需要在模型中定义 $fillable 属性，以防止恶意修改数据。
+     *
+     * @var string[]
+     */
+    protected $fillable = ['title', 'body', 'category_id', 'excerpt', 'slug'];
 
     /**
      * 定义于 category 的关联

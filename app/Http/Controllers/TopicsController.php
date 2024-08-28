@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Handlers\ImageUploadHandler;
+use App\Models\Category;
 use App\Models\Topic;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -11,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TopicsController extends Controller
 {
@@ -20,6 +23,10 @@ class TopicsController extends Controller
      */
     public function __construct()
     {
+        // 中间件是介于请求和响应之间的过滤器，用于过滤进入应用程序的 HTTP 请求
+        // 通过中间件，我们可以在请求到达应用程序之前或响应离开应用程序之后，对请求和响应进行处理
+        // 通过 $this->middleware('auth') 方法，我们可以为控制器指定中间件，这样，只有登录用户才能访问这些控制器
+        // 通过 $this->middleware('auth', ['except' => ['index', 'show']]) 方法，我们可以为控制器指定中间件，这样，除了 index 和 show 方法，其他方法都需要登录用户才能访问
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
@@ -58,18 +65,28 @@ class TopicsController extends Controller
      */
     public function create(Topic $topic): Factory|View|Application
     {
-        return view('topics.create_and_edit', compact('topic'));
+        $categories = Category::all();
+        return view('topics.create_and_edit', compact('topic', 'categories'));
     }
 
     /**
      * 创建话题
      *
      * @param TopicRequest $request
+     * @param Topic $topic
      * @return RedirectResponse
      */
-    public function store(TopicRequest $request): RedirectResponse
+    public function store(TopicRequest $request, Topic $topic): RedirectResponse
     {
-        $topic = Topic::create($request->all());
+        // Topic $topic 是依赖注入，这里的 $topic 是一个空的 Topic 实例
+        // $request->all() 获取所有用户的请求数据
+        // $topic->fill() 方法将 $request->all() 返回的数据填充到 $topic 实例中
+        // $topic->user_id = Auth::id() 为话题的 user_id 字段赋值为当前登录用户的 ID
+        // $topic->save() 方法将数据保存到数据库
+        $topic->fill($request->all());
+        $topic->user_id = Auth::id();
+        $topic->save();
+
         return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
     }
 
@@ -116,5 +133,35 @@ class TopicsController extends Controller
         $topic->delete();
 
         return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param Request $request
+     * @param ImageUploadHandler $uploader
+     * @return array
+     */
+    public function uploadImage(Request $request, ImageUploadHandler $uploader): array
+    {
+        // 初始化返回数据，默认是失败的
+        $data = [
+            'success' => false,
+            'msg' => '上传失败！',
+            'file_path' => ''
+        ];
+
+        // 判断是否上传文件，并赋值给 $file
+        if ($file = $request->upload_file) {
+            // 保存图片到本地
+            $result = $uploader->save($file, 'topics', Auth::id(), 1024);
+            // 图片保存成功的话
+            if ($result) {
+                $data['file_path'] = $result['path'];
+                $data['msg'] = '上传成功！';
+                $data['success'] = true;
+            }
+        }
+        return $data;
     }
 }
