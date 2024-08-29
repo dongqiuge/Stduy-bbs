@@ -156,3 +156,19 @@
     - deleted, 删除完成后触发
     - restoring, 恢复的时候触发
     - restored 恢复完成后触发
+
+  ## 2024-08-28
+- 运行的命令
+    - [x] `composer require "mews/purifier:~3.3"` 安装 HTML 过滤器
+    - [x] `php artisan vendor:publish --provider="Mews\Purifier\PurifierServiceProvider"` 发布 HTML 过滤器配置文件
+    - [x] `php artisan make:scaffold Reply --schema="topic_id:integer:unsigned:default(0):index,user_id:bigInteger:unsigned:default(0):index,content:text"` 生成回复模型、控制器、视图、数据迁移文件等
+    - [x] `php artisan make:scaffold Reply --schema="topic_id:integer:unsigned:default(0):index,user_id:bigInteger:unsigned:default(0):index,content:text"`
+      生成回复模型、控制器、视图、数据迁移文件等
+    - [x] `php artisan migrate:refresh --seed` 刷新数据库并填充数据，填充回复数据（生产环境不要使用）
+- 做了些什么
+    - XSS 过滤
+    - 话题编辑
+    - 话题删除
+    - 生成回复模型、控制器、视图、数据迁移文件等
+    - 生成回复数据填充文件
+    - 回复列表
