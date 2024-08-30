@@ -21,6 +21,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string slug SEO 友好的 URI
  * @property string created_at 创建时间
  * @property string updated_at 创建时间
+ * @property-read Category category 分类
+ * @property-read User user 用户
+ * @property-read Reply replies 回复
  * @extends \Illuminate\Database\Eloquent\Model
  */
 class Topic extends Model
@@ -107,7 +110,7 @@ class Topic extends Model
      */
     public function replies(): HasMany
     {
-        return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class)->orderBy('created_at', 'desc');
     }
 
     public function link($params = []): string

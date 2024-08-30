@@ -3,58 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplyRequest;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class RepliesController
+ * @package App\Http\Controllers
+ */
 class RepliesController extends Controller
 {
+
+    /**
+     * RepliesController constructor.
+     */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth');
     }
 
-	public function index()
-	{
-		$replies = Reply::paginate();
-		return view('replies.index', compact('replies'));
-	}
-
-    public function show(Reply $reply)
+    /**
+     * 发布评论
+     *
+     * @param ReplyRequest $request
+     * @param Reply $reply
+     * @return RedirectResponse
+     */
+    public function store(ReplyRequest $request, Reply $reply): RedirectResponse
     {
-        return view('replies.show', compact('reply'));
+        $reply->content = $request->content;
+        $reply->user_id = Auth::id();
+        $reply->topic_id = $request->topic_id;
+        $reply->save();
+        return redirect()->to($reply->topic->link())->with('success', '评论创建成功！');
     }
 
-	public function create(Reply $reply)
-	{
-		return view('replies.create_and_edit', compact('reply'));
-	}
+    /**
+     * 删除评论
+     *
+     * @param Reply $reply
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function destroy(Reply $reply): RedirectResponse
+    {
+        $this->authorize('destroy', $reply);
+        $reply->delete();
 
-	public function store(ReplyRequest $request)
-	{
-		$reply = Reply::create($request->all());
-		return redirect()->route('replies.show', $reply->id)->with('message', 'Created successfully.');
-	}
-
-	public function edit(Reply $reply)
-	{
-        $this->authorize('update', $reply);
-		return view('replies.create_and_edit', compact('reply'));
-	}
-
-	public function update(ReplyRequest $request, Reply $reply)
-	{
-		$this->authorize('update', $reply);
-		$reply->update($request->all());
-
-		return redirect()->route('replies.show', $reply->id)->with('message', 'Updated successfully.');
-	}
-
-	public function destroy(Reply $reply)
-	{
-		$this->authorize('destroy', $reply);
-		$reply->delete();
-
-		return redirect()->route('replies.index')->with('message', 'Deleted successfully.');
-	}
+        return redirect()->route('replies.index')->with('success', '评论删除成功！');
+    }
 }

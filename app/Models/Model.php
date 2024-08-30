@@ -1,41 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Models;
 
-class ReplyRequest extends Request
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+
+class Model extends EloquentModel
 {
-    public function rules()
+    public function scopeRecent($query)
     {
-        switch($this->method())
-        {
-            // CREATE
-            case 'POST':
-            {
-                return [
-                    // CREATE ROLES
-                ];
-            }
-            // UPDATE
-            case 'PUT':
-            case 'PATCH':
-            {
-                return [
-                    // UPDATE ROLES
-                ];
-            }
-            case 'GET':
-            case 'DELETE':
-            default:
-            {
-                return [];
-            }
-        }
+        return $query->orderBy('id', 'desc');
     }
 
-    public function messages()
+    public function scopeOrdered($query)
     {
-        return [
-            // Validation messages
-        ];
+        return $query->orderBy('order', 'desc');
     }
+
 }
