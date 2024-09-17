@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'PagesController@root')->name('root');
+Route::get('/', 'TopicsController@index')->name('root');
 
 // 用户身份验证相关的路由
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -67,11 +68,9 @@ Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]
 // 通知列表
 Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
 
-// 话题表单中的图片上传
-Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+// 模拟登录，用来测试 RBAC
+Route::get('/impersonate/{id}', [UsersController::class, 'impersonateUser'])->name('impersonate');
+Route::get('/stop-impersonating', [UsersController::class, 'stopImpersonating'])->name('stopImpersonating');
 
-// 话题回复
-Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
-
-// 通知列表
-Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+// 权限不足页面
+Route::get('permission-denied', 'PagesController@permissionDenied')->name('permission-denied');
