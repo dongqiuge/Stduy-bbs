@@ -2,29 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Topic
- * @property integer id ID
- * @property string title 标题
- * @property string body 内容
- * @property integer user_id 用户 ID
- * @property integer category_id 分类 ID
- * @property integer reply_count 回复数量
- * @property integer view_count 查看数量
- * @property integer last_reply_user_id 最后回复的用户 ID
- * @property integer order 最后回复的用户 ID
- * @property string excerpt 摘要
- * @property string slug SEO 友好的 URI
- * @property string created_at 创建时间
- * @property string updated_at 创建时间
- * @property-read Category category 分类
- * @property-read User user 用户
- * @property-read Reply replies 回复
- * @extends \Illuminate\Database\Eloquent\Model
+ * @property integer $id ID
+ * @property string $title 标题
+ * @property string $body 内容
+ * @property integer $user_id 用户 ID
+ * @property integer $category_id 分类 ID
+ * @property integer $reply_count 回复数量
+ * @property integer $view_count 查看数量
+ * @property integer $last_reply_user_id 最后回复的用户 ID
+ * @property integer $order 排序
+ * @property string $excerpt 摘要
+ * @property string $slug SEO 友好的 URI
+ * @property string $created_at 创建时间
+ * @property string $updated_at 更新时间
+ * @property-read Category $category 分类
+ * @property-read User $user 用户
+ * @property-read Collection|Reply[] $replies 回复
+ * @extends Model
  */
 class Topic extends Model
 {
@@ -113,7 +114,25 @@ class Topic extends Model
         return $this->hasMany(Reply::class)->orderBy('created_at', 'desc');
     }
 
-    public function link($params = []): string
+    /**
+     * 当话题有新回复或者删除回复时
+     * 我们需要更新话题的 reply_count 属性
+     *
+     * @return void
+     */
+    public function updateReplyCount(): void
+    {
+        $this->reply_count = $this->replies->count();
+        $this->save();
+    }
+
+    /**
+     * 生成话题链接
+     *
+     * @param array $params
+     * @return string
+     */
+    public function link(array $params = []): string
     {
         return route('topics.show', array_merge([$this->id, $this->slug], $params));
     }
