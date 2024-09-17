@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Handlers\ImageUploadHandler;
 use App\Models\Category;
+use App\Models\Link;
 use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -36,14 +38,18 @@ class TopicsController extends Controller
      *
      * @param Request $request
      * @param Topic $topic
+     * @param User $user
+     * @param Link $link
      * @return View|Factory|Application
      */
-    public function index(Request $request, Topic $topic): View|Factory|Application
+    public function index(Request $request, Topic $topic, User $user, Link $link): View|Factory|Application
     {
         $topics = $topic->withOrder($request->order)
             ->with('user', 'category') // 预加载 user 和 category 关联，避免 N+1 问题
             ->paginate(20);
-        return view('topics.index', compact('topics'));
+        $active_users = $user->getActiveUsers();
+        $links = $link->getAllCached();
+        return view('topics.index', compact('topics', 'active_users', 'links'));
     }
 
     /**
@@ -87,7 +93,7 @@ class TopicsController extends Controller
         $topic->user_id = Auth::id();
         $topic->save();
 
-        return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
+        return redirect()->to($topic->link())->with('success', '成功创建话题！');
     }
 
 
@@ -101,7 +107,8 @@ class TopicsController extends Controller
     public function edit(Topic $topic): Factory|View|Application
     {
         $this->authorize('update', $topic);
-        return view('topics.create_and_edit', compact('topic'));
+        $categories = Category::all();
+        return view('topics.create_and_edit', compact('topic', 'categories'));
     }
 
     /**
@@ -116,8 +123,7 @@ class TopicsController extends Controller
     {
         $this->authorize('update', $topic);
         $topic->update($request->all());
-
-        return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+        return redirect()->to($topic->link())->with('success', '更新成功！');
     }
 
     /**
@@ -132,7 +138,7 @@ class TopicsController extends Controller
         $this->authorize('destroy', $topic);
         $topic->delete();
 
-        return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
+        return redirect()->route('topics.index')->with('success', '成功删除！');
     }
 
     /**
