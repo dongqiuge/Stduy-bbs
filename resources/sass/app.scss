@@ -74,7 +74,7 @@ body {
 }
 
 /* Topic Index Page */
-.topics-index-page, .categories-show-page {
+.topics-index-page, .categories-show-page, .root-page {
     .topic-list {
         .nav > li > a {
             position: relative;
@@ -146,5 +146,21 @@ body {
     .meta {
         font-size: .9em;
         color: #b3b3b3;
+    }
+}
+
+/* 消息通知 */
+.notification-badge {
+    .badge {
+        font-size: 12px;
+        margin-top: 14px;
+    }
+
+    .badge-secondary {
+        background-color: #EBE8E8 !important;
+    }
+
+    .badge-hint {
+        background-color: #d15b47 !important;
     }
 }

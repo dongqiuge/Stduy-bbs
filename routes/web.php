@@ -66,3 +66,12 @@ Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]
 
 // 通知列表
 Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+
+// 话题表单中的图片上传
+Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+
+// 话题回复
+Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
+
+// 通知列表
+Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);

@@ -42,6 +42,12 @@
                             <i class="fa-solid fa-plus"></i>
                         </a>
                     </li>
+                    <li class="nav-item notification-badge">
+                        <a class="nav-link ms-3 me-3 badge bg-secondary rounded-pill badge-{{ Auth::user()->notification_count > 0 ? 'hint' : 'secondary' }} text-white"
+                           href="{{ route('notifications.index') }}">
+                            {{ Auth::user()->notification_count }}
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
@@ -52,8 +58,21 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('users.show', Auth::id()) }}">个人中心</a>
-                            <a class="dropdown-item" href="{{ route('users.edit', Auth::id()) }}">编辑资料</a>
+                            @can('manage_contents')
+                                <a class="dropdown-item" href="{{ url(config('administrator.uri')) }}">
+                                    <i class="fa-solid fa-gauge-high"></i>
+                                    管理后台
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            @endcan
+                            <a class="dropdown-item" href="{{ route('users.show', Auth::id()) }}">
+                                <i class="fa-solid fa-user"></i>
+                                个人中心
+                            </a>
+                            <a class="dropdown-item" href="{{ route('users.edit', Auth::id()) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                编辑资料
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logout" href="#">
                                 <form action="{{ route('logout') }}" method="POST"
