@@ -2,48 +2,34 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Reply
- *
- * @property int $id ID
- * @property int $user_id 用户 ID
- * @property int $topic_id 话题 ID
- * @property string $content 内容
- * @property Carbon|null $created_at 创建时间
- * @property Carbon|null $updated_at 更新时间
- * @property-read Topic $topic 话题
- * @property-read User $user 用户
+ * Class Category
+ * @property integer $id ID
+ * @property string $name 分类名称
+ * @property string $description 分类描述
+ * @property integer $post_count 文章数量
+ * @property-read Collection|Topic[] $topics 该分类下的所有话题
+ * @extends Model
  */
-class Reply extends Model
+class Category extends Model
 {
     use HasFactory;
 
     /**
-     * @var string[] $fillable
+     * 不自动维护时间戳
+     *
+     * @var array
      */
-    protected $fillable = ['content'];
+    public $timestamps = false;
 
     /**
-     * 一个回复属于一个话题
+     * 可以被批量赋值的属性
      *
-     * @return BelongsTo
+     * @var array
      */
-    public function topic(): BelongsTo
-    {
-        return $this->belongsTo(Topic::class);
-    }
-
-    /**
-     * 一个回复属于一个用户
-     *
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = ['name', 'description'];
 }
