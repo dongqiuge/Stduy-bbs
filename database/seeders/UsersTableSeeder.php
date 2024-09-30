@@ -20,9 +20,9 @@ class UsersTableSeeder extends Seeder
 
         // 处理第一个用户的数据
         $user = User::find(1);
-        $user->name = 'LuStormstout';
-        $user->email = 'lustormstout@gmail.com';
-        $user->password = bcrypt('11111111');
+        $user->name = 'dongqiuge';
+        $user->email = 'dongqiuge@126.com';
+        $user->password = bcrypt('00998877');
         $user->avatar = 'http://localhost:8000/uploads/images/avatars/202409/05/200.jpg';
         $user->save();
 
